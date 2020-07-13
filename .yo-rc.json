@@ -1,0 +1,16 @@
+{
+  "generator-chisel": {
+    "config": {
+      "name": "Legendairy",
+      "author": "jackmez",
+      "projectType": "fe",
+      "nameSlug": "legendairy",
+      "nameCamel": "Legendairy",
+      "chiselVersion": "0.16.1",
+      "has_jquery": false
+    },
+    "pages": [
+      "index"
+    ]
+  }
+}
