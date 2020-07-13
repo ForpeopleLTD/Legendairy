@@ -10,9 +10,6 @@ const three = () => {
     90,
     1000,
   );
-  camera.position.z = 333;
-
-  let controls;
 
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -20,13 +17,14 @@ const three = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 0.2, 0);
-  controls.update();
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 0.1, 0);
   controls.enablePan = false;
-  controls.enableDamping = false;
+  controls.enableDamping = true;
   controls.enableZoom = true;
+  controls.maxDistance = 600;
+  controls.update();
+  camera.position.z = 100;
 
   const vertices = [];
   for (let i = 0; i < 100000; i += 1) {
@@ -47,7 +45,7 @@ const three = () => {
     size: 0.5,
   });
   const material2 = new THREE.PointsMaterial({
-    color: 0xe0c379,
+    color: 0xe1bd61,
     size: 0.5,
   });
 
@@ -65,6 +63,7 @@ const three = () => {
     points2.rotation.y -= 0.002;
     points2.rotation.z -= 0.001;
     renderer.render(scene, camera);
+    controls.update();
   };
   animate();
 };

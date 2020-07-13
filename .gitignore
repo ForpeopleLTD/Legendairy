@@ -50,3 +50,6 @@ npm-debug.log
 .vagrant
 dev-vhost.conf
 .yo-rc-local.json
+
+# Local Netlify folder
+.netlify
