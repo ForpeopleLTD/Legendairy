@@ -3,6 +3,6 @@
   Author: jackmez
  */
 
-import greet from './modules/greeting';
+import three from './modules/three';
 
-greet('World');
+three();

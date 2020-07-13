@@ -92,7 +92,8 @@
     "webpack-stream": "^4.0.2"
   },
   "dependencies": {
-    "normalize-scss": "^7.0.1"
+    "normalize-scss": "^7.0.1",
+    "three": "^0.118.3"
   },
   "engines": {
     "node": "^8.10.0 || ^10.13.0"
