@@ -34,4 +34,9 @@ html {
   @include bp(full) {
     font-size: 1em; /* 16px */
   }
+
+}
+
+canvas:focus {
+  outline: none !important;
 }
