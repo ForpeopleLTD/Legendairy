@@ -7,10 +7,10 @@ const three = () => {
   const camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
-    0.1,
+    90,
     1000,
   );
-  camera.position.z = 100;
+  camera.position.z = 333;
 
   let controls;
 
@@ -22,18 +22,17 @@ const three = () => {
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 0.5, 0);
+  controls.target.set(0, 0.2, 0);
   controls.update();
   controls.enablePan = false;
   controls.enableDamping = false;
-  controls.enableZoom = false;
+  controls.enableZoom = true;
 
   const vertices = [];
-
   for (let i = 0; i < 100000; i += 1) {
-    const x = THREE.MathUtils.randFloatSpread(200);
-    const y = THREE.MathUtils.randFloatSpread(200);
-    const z = THREE.MathUtils.randFloatSpread(200);
+    const x = THREE.MathUtils.randFloatSpread(1000);
+    const y = THREE.MathUtils.randFloatSpread(1000);
+    const z = THREE.MathUtils.randFloatSpread(1000);
     vertices.push(x, y, z);
   }
 
@@ -45,11 +44,11 @@ const three = () => {
 
   const material = new THREE.PointsMaterial({
     color: 0xfa6238,
-    size: 0.1,
+    size: 0.5,
   });
   const material2 = new THREE.PointsMaterial({
     color: 0xe0c379,
-    size: 0.1,
+    size: 0.5,
   });
 
   const points = new THREE.Points(geometry, material);
@@ -61,13 +60,12 @@ const three = () => {
     requestAnimationFrame(animate);
     points.rotation.x += 0.001;
     points.rotation.y += 0.001;
-    points.rotation.z += 0.001;
+    points.rotation.z += 0.002;
     points2.rotation.x -= 0.001;
-    points2.rotation.y -= 0.001;
+    points2.rotation.y -= 0.002;
     points2.rotation.z -= 0.001;
     renderer.render(scene, camera);
   };
-
   animate();
 };
 
