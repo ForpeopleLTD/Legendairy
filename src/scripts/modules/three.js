@@ -18,6 +18,9 @@ const three = () => {
     window.open(canvas[0].toDataURL('image/png'));
   };
 
+  let vertices;
+  let points;
+
   const settings = {
     sugar: 100000,
     yeast: 10000,
@@ -58,24 +61,27 @@ const three = () => {
     scene.add(textMesh);
   });
 
-  const vertices = [];
-  for (let i = 0; i < settings.sugar; i += 1) {
-    const x = THREE.MathUtils.randFloatSpread(1000);
-    const y = THREE.MathUtils.randFloatSpread(1000);
-    const z = THREE.MathUtils.randFloatSpread(1000);
-    vertices.push(x, y, z);
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute(
-    'position',
-    new THREE.Float32BufferAttribute(vertices, 3),
-  );
-  const material = new THREE.PointsMaterial({
-    color: 0xdd4ff4,
-    size: 1,
-  });
-  const points = new THREE.Points(geometry, material);
-  scene.add(points);
+  const generateVertices = function generateVertices() {
+    vertices = [];
+    for (let i = 0; i < settings.sugar; i += 1) {
+      const x = THREE.MathUtils.randFloatSpread(1000);
+      const y = THREE.MathUtils.randFloatSpread(1000);
+      const z = THREE.MathUtils.randFloatSpread(1000);
+      vertices.push(x, y, z);
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(vertices, 3),
+    );
+    const material = new THREE.PointsMaterial({
+      color: 0xdd4ff4,
+      size: 1,
+    });
+    points = new THREE.Points(geometry, material);
+    scene.add(points);
+  };
 
   const animate = function animate() {
     requestAnimationFrame(animate);
@@ -85,6 +91,7 @@ const three = () => {
     renderer.render(scene, camera);
     controls.update();
   };
+  generateVertices();
   animate();
 
   window.onresize = () => {
@@ -102,6 +109,7 @@ const three = () => {
     .max(100000)
     .onChange(value => {
       settings.sugar = value;
+      generateVertices();
     });
   ferm
     .add(settings, 'yeast')
