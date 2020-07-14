@@ -77,7 +77,7 @@ const three = () => {
     );
     const material = new THREE.PointsMaterial({
       color: 0xdd4ff4,
-      size: 1,
+      size: 0.5,
     });
     points = new THREE.Points(geometry, material);
     scene.add(points);
@@ -106,8 +106,9 @@ const three = () => {
     .add(settings, 'sugar')
     .name('Sugar Quantity')
     .min(100)
-    .max(100000)
+    .max(1000000)
     .onChange(value => {
+      scene.remove(points);
       settings.sugar = value;
       generateVertices();
     });
