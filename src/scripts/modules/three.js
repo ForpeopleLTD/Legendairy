@@ -40,6 +40,7 @@ const three = () => {
     antialias: true,
     alpha: true,
     premultipliedAlpha: false,
+    preserveDrawingBuffer: true,
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
