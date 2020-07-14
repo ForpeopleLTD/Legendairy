@@ -9,20 +9,28 @@ const three = () => {
     50,
     window.innerWidth / window.innerHeight,
     90,
-    1000,
+    2000,
   );
 
   const canvas = document.getElementsByTagName('canvas');
-
   const save = function save() {
-    window.open(canvas[0].toDataURL('image/png'));
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style = 'display: none';
+    const url = canvas[0].toDataURL('image/png');
+    const filename = 'fermentation.png';
+    a.href = url;
+    a.download = filename;
+    a.click();
   };
 
-  let vertices;
-  let points;
+  let sugarVertices;
+  let sugarPoints;
+  let yeastVertices;
+  let yeastPoints;
 
   const settings = {
-    sugar: 100000,
+    sugar: 10000,
     yeast: 10000,
     oxygen: false,
     save,
@@ -58,68 +66,115 @@ const three = () => {
       color: 0x0b0039,
     });
     const textMesh = new THREE.Mesh(textGemetry, tesxtMaterial);
-    scene.add(textMesh);
+
+    const brandGemetry = new THREE.TextGeometry('BRAND ESSENCE', {
+      font,
+      size: 20,
+      height: 0,
+      curveSegments: 25,
+    });
+    brandGemetry.center();
+    const brandMaterial = new THREE.MeshBasicMaterial({
+      color: 0x0b0039,
+    });
+    const brandMesh = new THREE.Mesh(brandGemetry, brandMaterial);
+    brandMesh.position.z = 50;
+    brandMesh.position.y = 150;
+    brandMesh.position.x = 250;
+
+    scene.add(textMesh, brandMesh);
   });
 
-  const generateVertices = function generateVertices() {
-    vertices = [];
+  const generateSugar = function generateSugar() {
+    sugarVertices = [];
     for (let i = 0; i < settings.sugar; i += 1) {
       const x = THREE.MathUtils.randFloatSpread(1000);
       const y = THREE.MathUtils.randFloatSpread(1000);
       const z = THREE.MathUtils.randFloatSpread(1000);
-      vertices.push(x, y, z);
+      sugarVertices.push(x, y, z);
     }
-
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute(
+    const sugarGeometry = new THREE.BufferGeometry();
+    sugarGeometry.setAttribute(
       'position',
-      new THREE.Float32BufferAttribute(vertices, 3),
+      new THREE.Float32BufferAttribute(sugarVertices, 3),
     );
-    const material = new THREE.PointsMaterial({
+    const sugarMaterial = new THREE.PointsMaterial({
       color: 0xdd4ff4,
-      size: 0.5,
+      size: 0.75,
     });
-    points = new THREE.Points(geometry, material);
-    scene.add(points);
+    sugarPoints = new THREE.Points(sugarGeometry, sugarMaterial);
+    scene.add(sugarPoints);
+  };
+
+  const generateYeast = function generateYeast() {
+    yeastVertices = [];
+    for (let i = 0; i < settings.yeast; i += 1) {
+      const x = THREE.MathUtils.randFloatSpread(1000);
+      const y = THREE.MathUtils.randFloatSpread(1000);
+      const z = THREE.MathUtils.randFloatSpread(1000);
+      yeastVertices.push(x, y, z);
+    }
+    const yeastGeometry = new THREE.BufferGeometry();
+    yeastGeometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(yeastVertices, 3),
+    );
+    const yeastMaterial = new THREE.PointsMaterial({
+      color: 0xfa6238,
+      size: 0.75,
+    });
+    yeastPoints = new THREE.Points(yeastGeometry, yeastMaterial);
+    scene.add(yeastPoints);
   };
 
   const animate = function animate() {
     requestAnimationFrame(animate);
-    points.rotation.x += 0.001;
-    points.rotation.y += 0.001;
-    points.rotation.z += 0.001;
+    sugarPoints.rotation.x += 0.0001;
+    sugarPoints.rotation.y += 0.001;
+    sugarPoints.rotation.z += 0.001;
+    yeastPoints.rotation.x -= 0.001;
+    yeastPoints.rotation.y -= 0.0001;
+    yeastPoints.rotation.z -= 0.001;
     renderer.render(scene, camera);
     controls.update();
   };
-  generateVertices();
+
+  generateSugar();
+  generateYeast();
   animate();
 
-  window.onresize = () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  };
-
+  // GUI Controls
   const gui = new GUI();
   const ferm = gui.addFolder('Fermentation');
   ferm
     .add(settings, 'sugar')
     .name('Sugar Quantity')
     .min(100)
-    .max(1000000)
+    .max(250000)
     .onChange(value => {
-      scene.remove(points);
+      scene.remove(sugarPoints);
       settings.sugar = value;
-      generateVertices();
+      generateSugar();
     });
   ferm
     .add(settings, 'yeast')
     .name('Yeast Quantity')
     .min(100)
-    .max(10000000);
+    .max(250000)
+    .onChange(value => {
+      scene.remove(yeastPoints);
+      settings.yeast = value;
+      generateYeast();
+    });
   ferm.add(settings, 'oxygen').name('Remove Oxygen');
   ferm.open();
   gui.add(settings, 'save').name('Save Image');
+
+  window.onresize = () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  };
 };
 
 export default three;
