@@ -9,7 +9,7 @@ const three = () => {
   const camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
-    80,
+    90,
     2000,
   );
 
@@ -25,13 +25,13 @@ const three = () => {
     a.click();
   };
 
-  const fontSize = 35;
+  const fontSize = 30;
 
-  let textGroup;
   let sugarVertices;
   let sugarPoints;
   let yeastVertices;
   let yeastPoints;
+  let textGroup;
 
   const settings = {
     sugar: 10000,
@@ -57,9 +57,9 @@ const three = () => {
   controls.enablePan = false;
   controls.enableDamping = true;
   controls.enableZoom = true;
-  controls.minDistance = 300;
-  controls.maxDistance = 700;
-  controls.autoRotate = true;
+  controls.minDistance = 400;
+  controls.maxDistance = 600;
+  controls.autoRotate = false;
   camera.position.z = -500;
   controls.update();
 
@@ -78,7 +78,7 @@ const three = () => {
     workshopGemetry.center();
     const workshopMesh = new THREE.Mesh(workshopGemetry, textMaterial);
     workshopMesh.position.x = -350;
-    workshopMesh.position.y = 0;
+    workshopMesh.position.y = 10;
     workshopMesh.position.z = 350;
     workshopMesh.lookAt(0, 0, 0);
 
@@ -91,7 +91,7 @@ const three = () => {
     brandGemetry.center();
     const brandMesh = new THREE.Mesh(brandGemetry, textMaterial);
     brandMesh.position.x = 350;
-    brandMesh.position.y = -50;
+    brandMesh.position.y = 0;
     brandMesh.position.z = 350;
     brandMesh.lookAt(0, 0, 0);
 
@@ -117,13 +117,13 @@ const three = () => {
     strategyGemetry.center();
     const strategyMesh = new THREE.Mesh(strategyGemetry, textMaterial);
     strategyMesh.position.x = -350;
-    strategyMesh.position.y = 20;
+    strategyMesh.position.y = 0;
     strategyMesh.position.z = -350;
     strategyMesh.lookAt(0, 0, 0);
 
     textGroup = new THREE.Group();
     textGroup.add(workshopMesh, brandMesh, guidelinesMesh, strategyMesh);
-    textGroup.rotation.z = -0.12;
+    textGroup.rotation.z = -0.2;
     scene.add(textGroup);
   });
 
@@ -179,16 +179,21 @@ const three = () => {
 
   const animate = function animate() {
     requestAnimationFrame(animate);
+    textGroup.rotation.y -= 0.001;
     sugarPoints.rotation.x += 0.0001;
     sugarPoints.rotation.y += 0.001;
     sugarPoints.rotation.z += 0.001;
     yeastPoints.rotation.x -= 0.001;
     yeastPoints.rotation.y -= 0.0001;
     yeastPoints.rotation.z -= 0.001;
+    renderer.render(scene, camera);
     controls.update();
     stats.update();
-    renderer.render(scene, camera);
   };
+
+  generateSugar();
+  generateYeast();
+  animate();
 
   // GUI Controls
   const gui = new GUI();
@@ -197,7 +202,7 @@ const three = () => {
     .add(settings, 'sugar')
     .name('Sugar Quantity')
     .min(500)
-    .max(50000)
+    .max(100000)
     .onChange(value => {
       scene.remove(sugarPoints);
       settings.sugar = value;
@@ -207,7 +212,7 @@ const three = () => {
     .add(settings, 'yeast')
     .name('Yeast Quantity')
     .min(500)
-    .max(50000)
+    .max(100000)
     .onChange(value => {
       scene.remove(yeastPoints);
       settings.yeast = value;
@@ -222,9 +227,6 @@ const three = () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   };
-  generateSugar();
-  generateYeast();
-  animate();
 };
 
 export default three;
