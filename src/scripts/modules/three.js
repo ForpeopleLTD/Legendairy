@@ -15,7 +15,6 @@ const three = () => {
   const canvas = document.getElementsByTagName('canvas');
 
   const save = function save() {
-    console.log(canvas);
     window.open(canvas[0].toDataURL('image/png'));
   };
 
