@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { GUI } from 'three/examples/jsm/libs/dat.gui.module';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import Stats from 'three/examples/jsm/libs/stats.module';
 
 const three = () => {
   const scene = new THREE.Scene();
@@ -49,16 +48,13 @@ const three = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  const stats = new Stats();
-  document.body.appendChild(stats.dom);
-
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0.1, 0);
   controls.enablePan = false;
   controls.enableDamping = true;
   controls.enableZoom = true;
   controls.minDistance = 300;
-  controls.maxDistance = 700;
+  controls.maxDistance = 2000;
   controls.autoRotate = true;
   camera.position.z = -500;
   controls.update();
@@ -186,7 +182,6 @@ const three = () => {
     yeastPoints.rotation.y -= 0.0001;
     yeastPoints.rotation.z -= 0.001;
     controls.update();
-    stats.update();
     renderer.render(scene, camera);
   };
 
