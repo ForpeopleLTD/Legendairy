@@ -12,33 +12,6 @@ const three = () => {
     2000,
   );
 
-  const canvas = document.getElementsByTagName('canvas');
-  const save = function save() {
-    const a = document.createElement('a');
-    document.body.appendChild(a);
-    a.style = 'display: none';
-    const url = canvas[0].toDataURL('image/png');
-    const filename = 'fermentation.png';
-    a.href = url;
-    a.download = filename;
-    a.click();
-  };
-
-  const fontSize = 35;
-
-  let textGroup;
-  let sugarVertices;
-  let sugarPoints;
-  let yeastVertices;
-  let yeastPoints;
-
-  const settings = {
-    sugar: 10000,
-    yeast: 10000,
-    oxygen: false,
-    save,
-  };
-
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: true,
@@ -55,9 +28,44 @@ const three = () => {
   controls.enableZoom = true;
   controls.minDistance = 300;
   controls.maxDistance = 2000;
-  controls.autoRotate = true;
+  controls.autoRotate = false;
   camera.position.z = -500;
   controls.update();
+
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  function onMouseMove(event) {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  }
+
+  const canvas = document.getElementsByTagName('canvas');
+  const save = function save() {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style = 'display: none';
+    const url = canvas[0].toDataURL('image/png');
+    const filename = 'fermentation.png';
+    a.href = url;
+    a.download = filename;
+    a.click();
+  };
+
+  const fontSize = 20;
+
+  let textGroup;
+  let sugarVertices;
+  let sugarPoints;
+  let yeastVertices;
+  let yeastPoints;
+
+  const settings = {
+    sugar: 10000,
+    yeast: 10000,
+    oxygen: false,
+    save,
+  };
 
   const loader = new THREE.FontLoader();
   loader.load('assets/fonts/BRRR_Medium.json', font => {
@@ -119,7 +127,7 @@ const three = () => {
 
     textGroup = new THREE.Group();
     textGroup.add(workshopMesh, brandMesh, guidelinesMesh, strategyMesh);
-    textGroup.rotation.z = -0.12;
+    textGroup.rotation.z = 0.2;
     scene.add(textGroup);
   });
 
@@ -181,6 +189,20 @@ const three = () => {
     yeastPoints.rotation.x -= 0.001;
     yeastPoints.rotation.y -= 0.0001;
     yeastPoints.rotation.z -= 0.001;
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children[2].children);
+    for (let i = 0; i < intersects.length; i += 1) {
+      if (intersects[i].object.name === 'hover') {
+        intersects[i].object.scale.set(1, 1, 1);
+        intersects[i].object.name = 'target';
+      } else {
+        intersects[i].object.scale.set(2, 2, 2);
+        intersects[i].object.name = 'hover';
+      }
+    }
+    window.addEventListener('mousemove', onMouseMove, false);
+
     controls.update();
     renderer.render(scene, camera);
   };
@@ -191,7 +213,7 @@ const three = () => {
   ferm
     .add(settings, 'sugar')
     .name('Sugar Quantity')
-    .min(500)
+    .min(0)
     .max(50000)
     .onChange(value => {
       scene.remove(sugarPoints);
@@ -201,7 +223,7 @@ const three = () => {
   ferm
     .add(settings, 'yeast')
     .name('Yeast Quantity')
-    .min(500)
+    .min(0)
     .max(50000)
     .onChange(value => {
       scene.remove(yeastPoints);
