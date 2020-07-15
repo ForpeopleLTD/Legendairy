@@ -28,7 +28,7 @@ const three = () => {
   controls.enableZoom = true;
   controls.minDistance = 300;
   controls.maxDistance = 2000;
-  controls.autoRotate = false;
+  controls.autoRotate = true;
   camera.position.z = -500;
   controls.update();
 
@@ -146,7 +146,7 @@ const three = () => {
       new THREE.Float32BufferAttribute(sugarVertices, 3),
     );
     const sugarMaterial = new THREE.PointsMaterial({
-      size: 7,
+      size: 4,
       sizeAttenuation: false,
       map: purple,
       alphaTest: 0.5,
@@ -171,7 +171,7 @@ const three = () => {
       new THREE.Float32BufferAttribute(yeastVertices, 3),
     );
     const yeastMaterial = new THREE.PointsMaterial({
-      size: 6,
+      size: 4,
       sizeAttenuation: false,
       map: orange,
       alphaTest: 0.5,
