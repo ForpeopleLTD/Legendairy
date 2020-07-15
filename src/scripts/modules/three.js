@@ -206,6 +206,7 @@ const three = () => {
       a.style = 'display: none';
       const url = `https://legendairy.forpeople.com/${pageLink}`;
       a.href = url;
+      a.target = '_parent';
       a.click();
       a.remove();
     }
