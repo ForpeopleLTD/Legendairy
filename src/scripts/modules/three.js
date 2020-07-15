@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const three = () => {
   const scene = new THREE.Scene();
-  // scene.background = new THREE.Color(0xe7daca);
+  scene.background = new THREE.Color(0xe7daca);
   const camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
@@ -204,7 +204,7 @@ const three = () => {
       const a = document.createElement('a');
       document.body.appendChild(a);
       a.style = 'display: none';
-      const url = `https://legendairy.forpeople.com/${pageLink}`;
+      const url = `/${pageLink}`;
       a.href = url;
       a.target = '_parent';
       a.click();
