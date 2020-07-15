@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const three = () => {
   const scene = new THREE.Scene();
-  // scene.background = new THREE.Color(0xe7daca);
+  scene.background = new THREE.Color(0xe7daca);
   const camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
@@ -35,7 +35,7 @@ const three = () => {
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
 
-  function onMouseMove(event) {
+  function onMouseDown(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
@@ -50,6 +50,7 @@ const three = () => {
     a.href = url;
     a.download = filename;
     a.click();
+    a.remove();
   };
 
   const fontSize = 20;
@@ -70,7 +71,7 @@ const three = () => {
   const loader = new THREE.FontLoader();
   loader.load('assets/fonts/BRRR_Medium.json', font => {
     const textMaterial = new THREE.MeshBasicMaterial({
-      color: 0x0b0039,
+      color: 0xffffff,
     });
 
     const workshopGemetry = new THREE.TextGeometry('WORKSHOP', {
@@ -81,23 +82,25 @@ const three = () => {
     });
     workshopGemetry.center();
     const workshopMesh = new THREE.Mesh(workshopGemetry, textMaterial);
+    workshopMesh.name = 'workshop';
     workshopMesh.position.x = -350;
     workshopMesh.position.y = 0;
     workshopMesh.position.z = 350;
     workshopMesh.lookAt(0, 0, 0);
 
-    const brandGemetry = new THREE.TextGeometry('BRAND NARRATIVE', {
+    const narrativeGemetry = new THREE.TextGeometry('BRAND NARRATIVE', {
       font,
       size: fontSize,
       height: 0,
       curveSegments: 25,
     });
-    brandGemetry.center();
-    const brandMesh = new THREE.Mesh(brandGemetry, textMaterial);
-    brandMesh.position.x = 350;
-    brandMesh.position.y = -50;
-    brandMesh.position.z = 350;
-    brandMesh.lookAt(0, 0, 0);
+    narrativeGemetry.center();
+    const narrativeMesh = new THREE.Mesh(narrativeGemetry, textMaterial);
+    narrativeMesh.name = 'brand-narrative';
+    narrativeMesh.position.x = 350;
+    narrativeMesh.position.y = -50;
+    narrativeMesh.position.z = 350;
+    narrativeMesh.lookAt(0, 0, 0);
 
     const guidelinesGemetry = new THREE.TextGeometry('BRAND GUIDELINES', {
       font,
@@ -107,6 +110,7 @@ const three = () => {
     });
     guidelinesGemetry.center();
     const guidelinesMesh = new THREE.Mesh(guidelinesGemetry, textMaterial);
+    guidelinesMesh.name = 'brand-guidelines';
     guidelinesMesh.position.x = 350;
     guidelinesMesh.position.y = 0;
     guidelinesMesh.position.z = -350;
@@ -120,13 +124,14 @@ const three = () => {
     });
     strategyGemetry.center();
     const strategyMesh = new THREE.Mesh(strategyGemetry, textMaterial);
+    strategyMesh.name = 'brand-strategy';
     strategyMesh.position.x = -350;
     strategyMesh.position.y = 20;
     strategyMesh.position.z = -350;
     strategyMesh.lookAt(0, 0, 0);
 
     textGroup = new THREE.Group();
-    textGroup.add(workshopMesh, brandMesh, guidelinesMesh, strategyMesh);
+    textGroup.add(workshopMesh, narrativeMesh, guidelinesMesh, strategyMesh);
     textGroup.rotation.z = 0.2;
     scene.add(textGroup);
   });
@@ -191,18 +196,19 @@ const three = () => {
     yeastPoints.rotation.z -= 0.001;
 
     raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(scene.children[2].children);
+    const sceneObejects = scene.children;
+    const sceneText = sceneObejects[2].children;
+    const intersects = raycaster.intersectObjects(sceneText);
     for (let i = 0; i < intersects.length; i += 1) {
-      if (intersects[i].object.name === 'hover') {
-        intersects[i].object.scale.set(1, 1, 1);
-        intersects[i].object.name = 'target';
-      } else {
-        intersects[i].object.scale.set(2, 2, 2);
-        intersects[i].object.name = 'hover';
-      }
+      const pageLink = intersects[i].object.name;
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.style = 'display: none';
+      const url = `/${pageLink}`;
+      a.href = url;
+      a.click();
+      a.remove();
     }
-    window.addEventListener('mousemove', onMouseMove, false);
-
     controls.update();
     renderer.render(scene, camera);
   };
@@ -233,6 +239,9 @@ const three = () => {
   ferm.add(settings, 'oxygen').name('Remove Oxygen');
   ferm.open();
   gui.add(settings, 'save').name('Save Image');
+  gui.close();
+
+  window.addEventListener('mousedown', onMouseDown, false);
 
   window.onresize = () => {
     camera.aspect = window.innerWidth / window.innerHeight;
