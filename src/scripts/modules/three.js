@@ -204,7 +204,7 @@ const three = () => {
       const a = document.createElement('a');
       document.body.appendChild(a);
       a.style = 'display: none';
-      const url = `/${pageLink}`;
+      const url = `https://legendairy.forpeople.com/${pageLink}`;
       a.href = url;
       a.click();
       a.remove();
