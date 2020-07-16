@@ -274,7 +274,7 @@ const three = () => {
   gui.add(settings, 'save').name('Save Image');
   gui.hide();
 
-  window.addEventListener('mouseup', onMouseUp, false);
+  window.addEventListener('click', onMouseUp, false);
 
   window.onresize = () => {
     camera.aspect = window.innerWidth / window.innerHeight;
