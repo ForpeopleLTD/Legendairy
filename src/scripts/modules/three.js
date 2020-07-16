@@ -8,7 +8,7 @@ const three = () => {
   const camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
-    80,
+    100,
     2000,
   );
 
@@ -27,8 +27,8 @@ const three = () => {
   controls.enableDamping = true;
   controls.enableZoom = true;
   controls.minDistance = 300;
-  controls.maxDistance = 2000;
-  controls.autoRotate = true;
+  controls.maxDistance = 700;
+  controls.autoRotate = false;
   camera.position.z = -500;
   controls.update();
 
@@ -60,10 +60,13 @@ const three = () => {
   let sugarPoints;
   let yeastVertices;
   let yeastPoints;
+  let waterVertices;
+  let waterPoints;
 
   const settings = {
     sugar: 10000,
     yeast: 10000,
+    water: 10000,
     oxygen: false,
     save,
   };
@@ -136,7 +139,7 @@ const three = () => {
     scene.add(textGroup);
   });
 
-  const purple = new THREE.TextureLoader().load('assets/images/test2.svg');
+  const sugar = new THREE.TextureLoader().load('assets/images/sugar.svg');
   const generateSugar = function generateSugar() {
     sugarVertices = [];
     for (let i = 0; i < settings.sugar; i += 1) {
@@ -151,9 +154,9 @@ const three = () => {
       new THREE.Float32BufferAttribute(sugarVertices, 3),
     );
     const sugarMaterial = new THREE.PointsMaterial({
-      size: 4,
-      sizeAttenuation: false,
-      map: purple,
+      size: 1.5,
+      sizeAttenuation: true,
+      map: sugar,
       alphaTest: 0.5,
       transparent: true,
     });
@@ -161,7 +164,7 @@ const three = () => {
     scene.add(sugarPoints);
   };
 
-  const orange = new THREE.TextureLoader().load('assets/images/test.svg');
+  const yeast = new THREE.TextureLoader().load('assets/images/yeast.svg');
   const generateYeast = function generateYeast() {
     yeastVertices = [];
     for (let i = 0; i < settings.yeast; i += 1) {
@@ -176,14 +179,39 @@ const three = () => {
       new THREE.Float32BufferAttribute(yeastVertices, 3),
     );
     const yeastMaterial = new THREE.PointsMaterial({
-      size: 4,
-      sizeAttenuation: false,
-      map: orange,
+      size: 1.5,
+      sizeAttenuation: true,
+      map: yeast,
       alphaTest: 0.5,
       transparent: true,
     });
     yeastPoints = new THREE.Points(yeastGeometry, yeastMaterial);
     scene.add(yeastPoints);
+  };
+
+  const water = new THREE.TextureLoader().load('assets/images/water.svg');
+  const generateWater = function generateWater() {
+    waterVertices = [];
+    for (let i = 0; i < settings.water; i += 1) {
+      const x = THREE.MathUtils.randFloatSpread(1000);
+      const y = THREE.MathUtils.randFloatSpread(1000);
+      const z = THREE.MathUtils.randFloatSpread(1000);
+      waterVertices.push(x, y, z);
+    }
+    const waterGeometry = new THREE.BufferGeometry();
+    waterGeometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(waterVertices, 3),
+    );
+    const waterMaterial = new THREE.PointsMaterial({
+      size: 1.5,
+      sizeAttenuation: true,
+      map: water,
+      alphaTest: 0.5,
+      transparent: true,
+    });
+    waterPoints = new THREE.Points(waterGeometry, waterMaterial);
+    scene.add(waterPoints);
   };
 
   const animate = function animate() {
@@ -194,10 +222,13 @@ const three = () => {
     yeastPoints.rotation.x -= 0.001;
     yeastPoints.rotation.y -= 0.0001;
     yeastPoints.rotation.z -= 0.001;
+    waterPoints.rotation.x -= 0.0001;
+    waterPoints.rotation.y += 0.0001;
+    waterPoints.rotation.z += 0.0001;
 
     raycaster.setFromCamera(mouse, camera);
     const sceneObejects = scene.children;
-    const sceneText = sceneObejects[2].children;
+    const sceneText = sceneObejects[3].children;
     const intersects = raycaster.intersectObjects(sceneText);
     for (let i = 0; i < intersects.length; i += 1) {
       const pageLink = intersects[i].object.name;
@@ -220,7 +251,7 @@ const three = () => {
   ferm
     .add(settings, 'sugar')
     .name('Sugar Quantity')
-    .min(0)
+    .min(50)
     .max(50000)
     .onChange(value => {
       scene.remove(sugarPoints);
@@ -230,7 +261,7 @@ const three = () => {
   ferm
     .add(settings, 'yeast')
     .name('Yeast Quantity')
-    .min(0)
+    .min(50)
     .max(50000)
     .onChange(value => {
       scene.remove(yeastPoints);
@@ -240,7 +271,7 @@ const three = () => {
   ferm.add(settings, 'oxygen').name('Remove Oxygen');
   ferm.open();
   gui.add(settings, 'save').name('Save Image');
-  gui.close();
+  gui.hide();
 
   window.addEventListener('mouseup', onMouseUp, false);
 
@@ -251,6 +282,7 @@ const three = () => {
   };
   generateSugar();
   generateYeast();
+  generateWater();
   animate();
 };
 
