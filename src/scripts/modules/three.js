@@ -35,7 +35,7 @@ const three = () => {
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
 
-  function onMouseDown(event) {
+  function onMouseUp(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
@@ -110,7 +110,7 @@ const three = () => {
     });
     identityGeometry.center();
     const identityMesh = new THREE.Mesh(identityGeometry, textMaterial);
-    identityMesh.name = 'brand-guidelines';
+    identityMesh.name = 'brand-identity';
     identityMesh.position.x = 350;
     identityMesh.position.y = 0;
     identityMesh.position.z = -350;
@@ -242,7 +242,7 @@ const three = () => {
   gui.add(settings, 'save').name('Save Image');
   gui.close();
 
-  window.addEventListener('onclick', onMouseDown, false);
+  window.addEventListener('mouseup', onMouseUp, false);
 
   window.onresize = () => {
     camera.aspect = window.innerWidth / window.innerHeight;
