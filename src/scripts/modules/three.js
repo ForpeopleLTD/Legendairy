@@ -26,7 +26,7 @@ const three = () => {
   controls.enablePan = false;
   controls.enableDamping = true;
   controls.enableZoom = true;
-  controls.minDistance = 300;
+  controls.minDistance = 200;
   controls.maxDistance = 700;
   controls.autoRotate = true;
   controls.autoRotateSpeed = 1;
@@ -205,7 +205,7 @@ const three = () => {
       new THREE.Float32BufferAttribute(waterVertices, 3),
     );
     const waterMaterial = new THREE.PointsMaterial({
-      size: 1.5,
+      size: 2,
       sizeAttenuation: true,
       map: water,
       alphaTest: 0.5,
@@ -252,7 +252,7 @@ const three = () => {
   ferm
     .add(settings, 'sugar')
     .name('Sugar Quantity')
-    .min(50)
+    .min(1000)
     .max(50000)
     .onChange(value => {
       scene.remove(sugarPoints);
@@ -262,7 +262,7 @@ const three = () => {
   ferm
     .add(settings, 'yeast')
     .name('Yeast Quantity')
-    .min(50)
+    .min(1000)
     .max(50000)
     .onChange(value => {
       scene.remove(yeastPoints);
