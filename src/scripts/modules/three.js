@@ -74,14 +74,14 @@ const three = () => {
       color: 0xffffff,
     });
 
-    const workshopGemetry = new THREE.TextGeometry('WORKSHOP', {
+    const workshopGeometry = new THREE.TextGeometry('WORKSHOP', {
       font,
       size: fontSize,
       height: 0,
       curveSegments: 25,
     });
-    workshopGemetry.center();
-    const workshopMesh = new THREE.Mesh(workshopGemetry, textMaterial);
+    workshopGeometry.center();
+    const workshopMesh = new THREE.Mesh(workshopGeometry, textMaterial);
     workshopMesh.name = 'workshop';
     workshopMesh.position.x = -350;
     workshopMesh.position.y = 0;
@@ -102,19 +102,19 @@ const three = () => {
     narrativeMesh.position.z = 350;
     narrativeMesh.lookAt(0, 0, 0);
 
-    const guidelinesGemetry = new THREE.TextGeometry('BRAND GUIDELINES', {
+    const identityGeometry = new THREE.TextGeometry('BRAND IDENTITY', {
       font,
       size: fontSize,
       height: 0,
       curveSegments: 25,
     });
-    guidelinesGemetry.center();
-    const guidelinesMesh = new THREE.Mesh(guidelinesGemetry, textMaterial);
-    guidelinesMesh.name = 'brand-guidelines';
-    guidelinesMesh.position.x = 350;
-    guidelinesMesh.position.y = 0;
-    guidelinesMesh.position.z = -350;
-    guidelinesMesh.lookAt(0, 0, 0);
+    identityGeometry.center();
+    const identityMesh = new THREE.Mesh(identityGeometry, textMaterial);
+    identityMesh.name = 'brand-guidelines';
+    identityMesh.position.x = 350;
+    identityMesh.position.y = 0;
+    identityMesh.position.z = -350;
+    identityMesh.lookAt(0, 0, 0);
 
     const strategyGemetry = new THREE.TextGeometry('BRAND STRATEGY', {
       font,
@@ -131,7 +131,7 @@ const three = () => {
     strategyMesh.lookAt(0, 0, 0);
 
     textGroup = new THREE.Group();
-    textGroup.add(workshopMesh, narrativeMesh, guidelinesMesh, strategyMesh);
+    textGroup.add(workshopMesh, narrativeMesh, identityMesh, strategyMesh);
     textGroup.rotation.z = 0.2;
     scene.add(textGroup);
   });
@@ -242,7 +242,7 @@ const three = () => {
   gui.add(settings, 'save').name('Save Image');
   gui.close();
 
-  window.addEventListener('mousedown', onMouseDown, false);
+  window.addEventListener('onclick', onMouseDown, false);
 
   window.onresize = () => {
     camera.aspect = window.innerWidth / window.innerHeight;
