@@ -28,7 +28,8 @@ const three = () => {
   controls.enableZoom = true;
   controls.minDistance = 300;
   controls.maxDistance = 700;
-  controls.autoRotate = false;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 1;
   camera.position.z = -500;
   controls.update();
 
