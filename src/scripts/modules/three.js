@@ -65,8 +65,8 @@ const three = () => {
   let waterPoints;
 
   const settings = {
-    sugar: 10000,
-    yeast: 10000,
+    sugar: 30000,
+    yeast: 20000,
     water: 10000,
     oxygen: false,
     save,
