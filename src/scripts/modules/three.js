@@ -29,7 +29,7 @@ const three = () => {
   controls.minDistance = 200;
   controls.maxDistance = 700;
   controls.autoRotate = true;
-  controls.autoRotateSpeed = 1;
+  controls.autoRotateSpeed = 0.5;
   camera.position.z = -500;
   controls.update();
 
@@ -39,6 +39,7 @@ const three = () => {
   function onMouseUp(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    console.log(mouse);
   }
 
   const canvas = document.getElementsByTagName('canvas');
@@ -274,7 +275,8 @@ const three = () => {
   gui.add(settings, 'save').name('Save Image');
   gui.hide();
 
-  window.addEventListener('mouseup', onMouseUp, false);
+  window.addEventListener('click', onMouseUp, false);
+  window.addEventListener('touchend', onMouseUp, false);
 
   window.onresize = () => {
     camera.aspect = window.innerWidth / window.innerHeight;
