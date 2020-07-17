@@ -37,17 +37,13 @@ const three = () => {
   const mouse = new THREE.Vector2();
 
   function onMouseUp(event) {
-    console.log(event);
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    console.log(mouse);
   }
 
   function touchEnd(event) {
-    console.log(event);
     mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
-    console.log(mouse);
   }
 
   const canvas = document.getElementsByTagName('canvas');
@@ -283,7 +279,7 @@ const three = () => {
   gui.add(settings, 'save').name('Save Image');
   gui.hide();
 
-  window.addEventListener('click', onMouseUp, false);
+  window.addEventListener('mouseup', onMouseUp, false);
   window.addEventListener('touchend', touchEnd, false);
 
   window.onresize = () => {
