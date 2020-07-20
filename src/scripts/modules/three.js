@@ -256,9 +256,9 @@ const three = () => {
   const ferm = gui.addFolder('Fermentation');
   ferm
     .add(settings, 'sugar')
-    .name('Sugar Quantity')
+    .name('Sugar quantity')
     .min(1000)
-    .max(50000)
+    .max(100000)
     .onChange(value => {
       scene.remove(sugarPoints);
       settings.sugar = value;
@@ -266,13 +266,23 @@ const three = () => {
     });
   ferm
     .add(settings, 'yeast')
-    .name('Yeast Quantity')
+    .name('Yeast quantity')
     .min(1000)
-    .max(50000)
+    .max(100000)
     .onChange(value => {
       scene.remove(yeastPoints);
       settings.yeast = value;
       generateYeast();
+    });
+  ferm
+    .add(settings, 'water')
+    .name('Water quantity')
+    .min(1000)
+    .max(100000)
+    .onChange(value => {
+      scene.remove(waterPoints);
+      settings.water = value;
+      generateWater();
     });
   ferm.add(settings, 'oxygen').name('Remove Oxygen');
   ferm.open();
