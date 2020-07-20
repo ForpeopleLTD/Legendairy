@@ -228,9 +228,9 @@ const three = () => {
     yeastPoints.rotation.x -= 0.001;
     yeastPoints.rotation.y -= 0.0001;
     yeastPoints.rotation.z -= 0.001;
-    waterPoints.rotation.x -= 0.0001;
-    waterPoints.rotation.y += 0.0001;
-    waterPoints.rotation.z += 0.0001;
+    waterPoints.rotation.x -= 0.001;
+    waterPoints.rotation.y -= 0.001;
+    waterPoints.rotation.z += 0.001;
 
     raycaster.setFromCamera(mouse, camera);
     const sceneObejects = scene.children;
@@ -249,6 +249,20 @@ const three = () => {
     }
     controls.update();
     renderer.render(scene, camera);
+  };
+
+  const removeOxygen = function removeOxygen(value) {
+    if (value === true) {
+      scene.background = new THREE.Color(0x02002c);
+      controls.minDistance = 1250;
+      controls.maxDistance = 1250;
+      camera.position.z = -1250;
+    } else {
+      scene.background = new THREE.Color(0xe7daca);
+      controls.minDistance = 250;
+      controls.maxDistance = 550;
+      camera.position.z = -500;
+    }
   };
 
   // GUI Controls
@@ -284,7 +298,12 @@ const three = () => {
       settings.water = value;
       generateWater();
     });
-  ferm.add(settings, 'oxygen').name('Remove Oxygen');
+  ferm
+    .add(settings, 'oxygen')
+    .name('Remove Oxygen')
+    .onChange(value => {
+      removeOxygen(value);
+    });
   ferm.open();
   gui.add(settings, 'save').name('Save Image');
   gui.hide();
